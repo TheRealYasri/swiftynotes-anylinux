@@ -6,10 +6,10 @@ export VERSION=$(grep 'version:' source/snap/snapcraft.yaml | head -n 1 | cut -d
 echo "X-AppImage-Version=$VERSION" > ./appinfo
 mkdir -p ./deploy
 cp /usr/bin/swiftynotes ./deploy/swiftynotes
-cp -r /usr/bin/swifty-notes-gtk_SwiftyNotes.resources ./deploy/
+cp -r /usr/libexec/swifty-notes/swifty-notes-gtk_SwiftyNotes.resources ./deploy/
 mkdir -p ./deploy/hunspell
-cp /usr/share/hunspell/*.dic ./deploy/hunspell/
-cp /usr/share/hunspell/*.aff ./deploy/hunspell/
+cp /usr/share/hunspell/*.dic ./deploy/hunspell/ 2>/dev/null || true
+cp /usr/share/hunspell/*.aff ./deploy/hunspell/ 2>/dev/null || true
 export ADD_HOOKS="self-updater.hook"
 export OUTPATH="$(pwd)/dist"
 mkdir -p "$OUTPATH"
@@ -18,6 +18,7 @@ export DESKTOP=/usr/share/applications/me.spaceinbox.swiftynotes.desktop
 
 # Deploy dependencies
 quick-sharun \
+    --exec "./deploy/swiftynotes" \
     ./deploy/swiftynotes \
     ./deploy/swifty-notes-gtk_SwiftyNotes.resources \
     ./deploy/hunspell/ \
