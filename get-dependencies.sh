@@ -8,7 +8,7 @@ sudo pacman -Syy --noconfirm archlinux-keyring
 #Make
 sudo pacman -S --noconfirm --needed git base-devel
 #Needed
-sudo pacman -S --noconfirm --needed gtk4 libadwaita gtksourceview5 hunspell ncurses libxml2-legacy libspelling
+sudo pacman -S --noconfirm --needed gtk4 libadwaita gtksourceview5 hunspell hunspell-en_us hunspell-en_gb hunspell-de hunspell-fr hunspell-es hunspell-it hunspell-pt_br ncurses libxml2-legacy libspelling
 
 echo "Installing debloated packages..."
 echo "---------------------------------------------------------------"
