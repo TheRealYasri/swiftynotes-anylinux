@@ -5,7 +5,7 @@ set -eu
 export VERSION=$(grep 'version:' source/snap/snapcraft.yaml | head -n 1 | cut -d'"' -f2 | tr -d ' ')
 echo "X-AppImage-Version=$VERSION" > ./appinfo
 mkdir -p ./deploy
-cp /usr/bin/swiftynotes ./deploy/swiftynotes
+cp /usr/libexec/swifty-notes/swiftynotes ./deploy/swiftynotes
 cp -r /usr/libexec/swifty-notes/swifty-notes-gtk_SwiftyNotes.resources ./deploy/
 mkdir -p ./deploy/hunspell
 cp /usr/share/hunspell/*.dic ./deploy/hunspell/ 2>/dev/null || true
@@ -18,7 +18,7 @@ export DESKTOP=/usr/share/applications/me.spaceinbox.swiftynotes.desktop
 
 # Deploy dependencies
 quick-sharun \
-    --exec "./deploy/swiftynotes" \
+    --exec "swiftynotes" \
     ./deploy/swiftynotes \
     ./deploy/swifty-notes-gtk_SwiftyNotes.resources \
     ./deploy/hunspell/ \
