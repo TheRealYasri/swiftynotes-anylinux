@@ -4,9 +4,12 @@ set -eu
 # Setup
 export VERSION=$(grep 'version:' source/snap/snapcraft.yaml | head -n 1 | cut -d'"' -f2 | tr -d ' ')
 echo "X-AppImage-Version=$VERSION" > ./appinfo
-mkdir -p ./deploy_bin
-cp /usr/libexec/swifty-notes/swiftynotes ./deploy_bin/swiftynotes
-cp -r /usr/libexec/swifty-notes/swifty-notes-gtk_SwiftyNotes.resources ./deploy_bin/
+mkdir -p ./deploy
+cp /usr/bin/swiftynotes ./deploy/swiftynotes
+cp -r /usr/bin/swifty-notes-gtk_SwiftyNotes.resources ./deploy/
+mkdir -p ./deploy/hunspell
+cp /usr/share/hunspell/*.dic ./deploy/hunspell/
+cp /usr/share/hunspell/*.aff ./deploy/hunspell/
 export ADD_HOOKS="self-updater.hook"
 export OUTPATH="$(pwd)/dist"
 mkdir -p "$OUTPATH"
@@ -15,15 +18,15 @@ export DESKTOP=/usr/share/applications/me.spaceinbox.swiftynotes.desktop
 
 # Deploy dependencies
 quick-sharun \
-    ./deploy_bin/swiftynotes \
-    ./deploy_bin/swifty-notes-gtk_SwiftyNotes.resources \
+    ./deploy/swiftynotes \
+    ./deploy/swifty-notes-gtk_SwiftyNotes.resources \
+    ./deploy/hunspell/ \
     /usr/lib/libspelling-1.so \
     /usr/lib/libgtk-4.so \
     /usr/lib/libadwaita-1.so \
     /usr/lib/libgtksourceview-5.so \
     /usr/lib/libenchant-2.so \
     /usr/lib/libhunspell-1.7.so \
-    /usr/share/hunspell/ \
     /usr/lib/libxml2.so.2 \
     /usr/lib/libncursesw.so.6
 
