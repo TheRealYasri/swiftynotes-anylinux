@@ -15,7 +15,6 @@ export DESKTOP=/usr/share/applications/me.spaceinbox.swiftynotes.desktop
 
 # Deploy dependencies
 quick-sharun \
-    --exec "swiftynotes" \
     ./deploy_bin/swiftynotes \
     ./deploy_bin/swifty-notes-gtk_SwiftyNotes.resources \
     /usr/lib/libspelling-1.so \
