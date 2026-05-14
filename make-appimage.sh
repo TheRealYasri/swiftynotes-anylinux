@@ -4,8 +4,8 @@ set -eu
 # Setup
 export VERSION=$(grep 'version:' source/snap/snapcraft.yaml | head -n 1 | cut -d'"' -f2 | tr -d ' ')
 echo "X-AppImage-Version=$VERSION" > ./appinfo
-sudo cp /usr/libexec/swifty-notes/swiftynotes /usr/bin/swiftynotes
-sudo cp -r /usr/libexec/swifty-notes/swifty-notes-gtk_SwiftyNotes.resources /usr/bin/
+cp /usr/libexec/swifty-notes/swiftynotes ./swiftynotes
+cp -r /usr/libexec/swifty-notes/swifty-notes-gtk_SwiftyNotes.resources ./swifty-notes-gtk_SwiftyNotes.resources
 sudo mkdir -p /usr/share/hunspell/
 export ADD_HOOKS="self-updater.hook"
 export OUTPATH="$(pwd)/dist"
@@ -16,8 +16,8 @@ export DESKTOP=/usr/share/applications/me.spaceinbox.swiftynotes.desktop
 # Deploy dependencies
 quick-sharun \
     --exec "swiftynotes" \
-    /usr/bin/swiftynotes \
-    /usr/bin/swifty-notes-gtk_SwiftyNotes.resources \
+    ./swiftynotes \
+    ./swifty-notes-gtk_SwiftyNotes.resources \
     /usr/lib/libspelling-1.so \
     /usr/lib/libgtk-4.so \
     /usr/lib/libadwaita-1.so \
