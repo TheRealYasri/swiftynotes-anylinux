@@ -7,14 +7,14 @@ export ARCH VERSION
 export OUTPATH=./dist
 export VERSION=$(grep 'version:' source/snap/snapcraft.yaml | head -n 1 | cut -d'"' -f2 | tr -d ' ')
 export ADD_HOOKS="self-updater.hook"
+export UPINFO="gh-releases-zsync|${GITHUB_REPOSITORY%/*}|${GITHUB_REPOSITORY#*/}|latest|*$ARCH.AppImage.zsync"
 export ICON=/usr/share/icons/hicolor/scalable/apps/me.spaceinbox.swiftynotes.svg
 export DESKTOP=/usr/share/applications/me.spaceinbox.swiftynotes.desktop
 
-# List files directly from the system for bundling
+# Deploy dependencies
 quick-sharun \
     /usr/bin/swiftynotes \
     /usr/libexec/swifty-notes/swiftynotes \
-    /usr/libexec/swifty-notes/swifty-notes-gtk_SwiftyNotes.resources \
     /usr/share/hunspell/ \
     /usr/lib/libspelling-1.so \
     /usr/lib/libgtk-4.so \
@@ -25,8 +25,15 @@ quick-sharun \
     /usr/lib/libxml2.so.2 \
     /usr/lib/libncursesw.so.6
 
-# Turn AppDir into AppImage and output to the current directory
+# Additional changes can be done in between here
+cp -r /usr/libexec/swifty-notes/swifty-notes-gtk_SwiftyNotes.resources AppDir/bin/
+rm -f AppDir/shared/lib/enchant-2/enchant_aspell.so
+rm -f AppDir/shared/lib/enchant-2/enchant_hspell.so
+rm -f AppDir/shared/lib/enchant-2/enchant_nuspell.so
+rm -f AppDir/shared/lib/enchant-2/enchant_voikko.so
+
+# Turn AppDir into AppImage
 quick-sharun --make-appimage --version "$VERSION" --output "."
 
-# Test the app for 12 seconds
-#quick-sharun --test ./*.AppImage
+# Test the app for 12 seconds, if the test fails due to the app
+# having issues running in the CI use --simple-test instead#quick-sharun --test ./*.AppImage
