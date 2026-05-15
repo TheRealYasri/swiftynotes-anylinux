@@ -2,9 +2,10 @@
 set -eu
 
 # Setup
+ARCH=$(uname -m)
+export ARCH VERSION
+export OUTPATH=./dist
 export VERSION=$(grep 'version:' source/snap/snapcraft.yaml | head -n 1 | cut -d'"' -f2 | tr -d ' ')
-echo "X-AppImage-Version=$VERSION" > ./appinfo
-
 export ADD_HOOKS="self-updater.hook"
 export ICON=/usr/share/icons/hicolor/scalable/apps/me.spaceinbox.swiftynotes.svg
 export DESKTOP=/usr/share/applications/me.spaceinbox.swiftynotes.desktop
