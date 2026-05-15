@@ -4,24 +4,17 @@ set -eu
 # Setup
 export VERSION=$(grep 'version:' source/snap/snapcraft.yaml | head -n 1 | cut -d'"' -f2 | tr -d ' ')
 echo "X-AppImage-Version=$VERSION" > ./appinfo
-mkdir -p ./deploy
-cp /usr/libexec/swifty-notes/swiftynotes ./deploy/swiftynotes
-cp -r /usr/libexec/swifty-notes/swifty-notes-gtk_SwiftyNotes.resources ./deploy/
-mkdir -p ./deploy/hunspell
-cp /usr/share/hunspell/*.dic ./deploy/hunspell/ 2>/dev/null || true
-cp /usr/share/hunspell/*.aff ./deploy/hunspell/ 2>/dev/null || true
+
 export ADD_HOOKS="self-updater.hook"
-export OUTPATH="$(pwd)/dist"
-mkdir -p "$OUTPATH"
 export ICON=/usr/share/icons/hicolor/scalable/apps/me.spaceinbox.swiftynotes.svg
 export DESKTOP=/usr/share/applications/me.spaceinbox.swiftynotes.desktop
 
-# Deploy dependencies
+# List files directly from the system for bundling
 quick-sharun \
-    --exec "swiftynotes" \
-    ./deploy/swiftynotes \
-    ./deploy/swifty-notes-gtk_SwiftyNotes.resources \
-    ./deploy/hunspell/ \
+    /usr/bin/swiftynotes \
+    /usr/libexec/swifty-notes/swiftynotes \
+    /usr/libexec/swifty-notes/swifty-notes-gtk_SwiftyNotes.resources \
+    /usr/share/hunspell/ \
     /usr/lib/libspelling-1.so \
     /usr/lib/libgtk-4.so \
     /usr/lib/libadwaita-1.so \
@@ -31,9 +24,8 @@ quick-sharun \
     /usr/lib/libxml2.so.2 \
     /usr/lib/libncursesw.so.6
 
-# Turn AppDir into AppImage
-quick-sharun --make-appimage --version "$VERSION" --output "$OUTPATH"
+# Turn AppDir into AppImage and output to the current directory
+quick-sharun --make-appimage --version "$VERSION" --output "."
 
-# Test the app for 12 seconds, if the test fails due to the app
-# having issues running in the CI use --simple-test instead
-quick-sharun --test "$OUTPATH"/*.AppImage
+# Test the app for 12 seconds
+quick-sharun --test ./*.AppImage
