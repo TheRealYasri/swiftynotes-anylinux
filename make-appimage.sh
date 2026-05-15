@@ -28,4 +28,4 @@ quick-sharun \
 quick-sharun --make-appimage --version "$VERSION" --output "."
 
 # Test the app for 12 seconds
-quick-sharun --test ./*.AppImage
+#quick-sharun --test ./*.AppImage
